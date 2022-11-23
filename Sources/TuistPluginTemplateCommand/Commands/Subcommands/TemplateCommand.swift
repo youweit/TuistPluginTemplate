@@ -5,30 +5,35 @@ extension MainCommand {
     /// A command to lint the code using SwiftLint.
     struct TemplateCommand: ParsableCommand {
         static var configuration = CommandConfiguration(
-            commandName: "swiftlint",
-            abstract: "Lints the code of your projects using SwiftLint."
+            commandName: "template",
+            abstract: "Take a .stencil template and dictionary to render a template."
         )
-        
+
         @Option(
             name: .shortAndLong,
-            help: "The path to the directory that contains the workspace or project whose code will be linted.",
+            help: "The path to generated file.",
             completion: .directory
         )
-        var path: String?
-        
-        @Argument(
-            help: "The target to be linted. When not specified all the targets of the graph are linted."
-        )
-        var target: String?
-        
-        @Flag(
+
+        var des: String
+
+        @Option(
             name: .shortAndLong,
-            help: "Upgrades warnings to serious violations (errors)."
+            help: "The path to the .stencil file.",
+            completion: .directory
         )
-        var strict: Bool = false
-        
+
+        var path: String
+
+        @Option(
+            name: .shortAndLong,
+            help: "The serialize json of the parameter."
+        )
+        var json: String?
+
+
         func run() throws {
-            try TemplateService().run()
+            try TemplateService().run(destinationFilePath: des ,templateFilePath: path, with: json)
         }
     }
 }
